@@ -15,7 +15,9 @@ class ServiceContainer extends \Pimple
         $this['build_directory'] = $buildDirectory;
         $this['index_file_name'] = 'index.rst';
         $this['library_directories'] = $libraryDirectories;
-        $this['documentation_directory'] = '/meta/doc';
+        $this['documentation_directory'] = 'meta/doc/';
+        $this['relative_links_directory'] = 'links/';
+        $this['links_directory'] = $this['build_directory'] . $this['relative_links_directory'];
 
         $servicePrefix = $cli ? 'cli_' : '';
 
@@ -31,9 +33,9 @@ class ServiceContainer extends \Pimple
             }
         );
 
-        $this['builder'] = $this->share(
+        $this['collector'] = $this->share(
             function (ServiceContainer $serviceContainer) use ($servicePrefix) {
-                return new Builder(
+                return new Collector(
                     $serviceContainer[$servicePrefix . 'documentation_root_collector'],
                     $serviceContainer[$servicePrefix . 'documentation_root_importer'],
                     $this[$servicePrefix . 'table_of_contents_generator']
@@ -56,7 +58,7 @@ class ServiceContainer extends \Pimple
 
         $this['documentation_root_importer'] = $this->share(
             function (ServiceContainer $serviceContainer) {
-                return new DocumentationRootImporter($serviceContainer['build_directory'], $serviceContainer['filesystem']);
+                return new DocumentationRootImporter($serviceContainer['links_directory'], $serviceContainer['filesystem']);
             }
         );
 
@@ -68,7 +70,7 @@ class ServiceContainer extends \Pimple
 
         $this['table_of_contents_generator'] = $this->share(
             function (ServiceContainer $serviceContainer) {
-                return new TableOfContentsGenerator($serviceContainer['build_directory']);
+                return new TableOfContentsGenerator($serviceContainer['build_directory'], $serviceContainer['relative_links_directory']);
             }
         );
 
@@ -87,11 +89,11 @@ class ServiceContainer extends \Pimple
     }
 
     /**
-     * @return Builder;
+     * @return Collector;
      */
-    public function getBuilder()
+    public function getCollector()
     {
-        return $this['builder'];
+        return $this['collector'];
     }
 
     /**

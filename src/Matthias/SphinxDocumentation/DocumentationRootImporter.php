@@ -6,19 +6,22 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class DocumentationRootImporter implements DocumentationRootImporterInterface
 {
-    private $buildDirectory;
     private $filesystem;
+    private $linksDirectory;
 
-    public function __construct($buildDirectory, Filesystem $filesystem)
+    public function __construct($linksDirectory, Filesystem $filesystem)
     {
-        $this->buildDirectory = $buildDirectory;
         $this->filesystem = $filesystem;
+        $this->linksDirectory = Path::directory($linksDirectory);
     }
 
     public function import(array $documentationRoots)
     {
+        $this->filesystem->remove($this->linksDirectory);
+        $this->filesystem->mkdir($this->linksDirectory);
+
         foreach ($documentationRoots as $name => $sourceDirectory) {
-            $targetDirectory = $this->buildDirectory . '/' . $name;
+            $targetDirectory = $this->linksDirectory . $name;
             $this->filesystem->symlink($sourceDirectory, $targetDirectory, true);
         }
     }

@@ -13,10 +13,11 @@ class TableOfContentsGeneratorTest extends \PHPUnit_Framework_TestCase
     public function it_creates_a_table_of_contents_file()
     {
         $buildDirectory = sys_get_temp_dir() . '/' . uniqid() . '/';
+        $relativeLinksDirectory = 'links/';
         $filesystem = new Filesystem();
         $filesystem->mkdir($buildDirectory);
 
-        $generator = new TableOfContentsGenerator($buildDirectory);
+        $generator = new TableOfContentsGenerator($buildDirectory, $relativeLinksDirectory);
         $generator->generateFor(
             array(
                 'fixtures-some-library' => 'path-is-irrelevant',
@@ -26,12 +27,12 @@ class TableOfContentsGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $expectedTableOfContents = <<<EOD
 .. toctree::
-   fixtures-some-library/index
-   fixtures-some-other-library/index
+   links/fixtures-some-library/index
+   links/fixtures-some-other-library/index
 
 EOD;
 
-        $this->assertSame($expectedTableOfContents, file_get_contents($buildDirectory.'/index.rst'));
+        $this->assertSame($expectedTableOfContents, file_get_contents($buildDirectory.'index.rst'));
 
         $filesystem->remove($buildDirectory);
     }

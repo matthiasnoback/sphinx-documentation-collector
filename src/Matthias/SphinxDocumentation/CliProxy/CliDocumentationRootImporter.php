@@ -21,13 +21,22 @@ class CliDocumentationRootImporter implements DocumentationRootImporterInterface
         foreach ($documentationRoots as $name => $path) {
             $this->stdio->outln(
                 sprintf(
-                    'Create symlink <<yellow>>%s<<reset>>',
+                    'Create symlink <<yellow>>%s<<reset>> to <<yellow>>%s<<reset>>',
                     $name,
-                    $path
+                    $this->shortenedPath($path, 60)
                 )
             );
         }
 
         $this->documentRootImporter->import($documentationRoots);
+    }
+
+    private function shortenedPath($path, $maxLength)
+    {
+        if (strlen($path) <= $maxLength) {
+            return $path;
+        }
+
+        return '...' . substr($path, -1 * ($maxLength - 3));
     }
 }

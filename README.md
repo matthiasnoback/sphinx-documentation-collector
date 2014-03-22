@@ -12,7 +12,7 @@ them into one table of contents file, which will be your project documentation.
 
 ## Usage
 
-    php bin/build.php /build/documentation --library-dir=/src/Acme/* --library-dir=/vendor/acme/*
+    php bin/collect.php build/documentation --library-dir=src/Acme/*/ --library-dir=vendor/acme/*/
 
 The first argument should be the Sphinx documentation directory. Then you need to supply one or more ``--library-dir``
 options. Those will be used to scan for ``/meta/doc`` directories containing an ``index.rst`` file. For each of these

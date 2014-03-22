@@ -2,7 +2,7 @@
 
 namespace Matthias\SphinxDocumentation;
 
-class Builder
+class Collector
 {
     private $documentationRootCollector;
     private $documentationRootImporter;
@@ -18,7 +18,7 @@ class Builder
         $this->tableOfContentsGenerator = $tableOfContentsGenerator;
     }
 
-    public function build()
+    public function collect()
     {
         $documentationRoots = $this->documentationRootCollector->collect();
 

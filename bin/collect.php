@@ -32,4 +32,4 @@ $libraryDirectories = $getopt->get('--library-dir');
 
 $serviceContainer = new ServiceContainer($projectDirectory, $buildDirectory, $libraryDirectories, true);
 
-$serviceContainer->getBuilder()->build();
+$serviceContainer->getCollector()->collect();
