@@ -70,7 +70,7 @@ class ServiceContainer extends \Pimple
 
         $this['table_of_contents_generator'] = $this->share(
             function (ServiceContainer $serviceContainer) {
-                return new TableOfContentsGenerator($serviceContainer['build_directory'], $serviceContainer['relative_links_directory']);
+                return new TableOfContentsGenerator($serviceContainer['links_directory']);
             }
         );
 
